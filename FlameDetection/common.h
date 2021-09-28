@@ -19,7 +19,7 @@
 #include <list>
 #include <map>
 
-#include <opencv2/core/core.hpp>
+#include <opencv2/opencv.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/video/video.hpp>
@@ -29,7 +29,7 @@ using namespace std;
 using namespace cv;
 
 //#define OLD_ALGO
-#define TRAIN_MODE
+// #define TRAIN_MODE
 //#define DEBUG_OUTPUT
 
 #ifdef TRAIN_MODE

@@ -46,7 +46,7 @@ FlameDecider::FlameDecider()
 #else
 FlameDecider::FlameDecider()
 {
-    mSVM.load(SVM_DATA_FILE.c_str());
+    mSVM->load(SVM_DATA_FILE.c_str());
 }
 #endif
 
@@ -123,22 +123,24 @@ void FlameDecider::svmStudy()
 {
     assert(mFeatureVec.size() == mResultVec.size());
     
-    int size = int(mFeatureVec.size());
-	Mat data(size, Feature::LEN, CV_32FC1);
-	Mat label(size, 1, CV_32FC1);
-    
-	for (int i = 0; i < size; i++) {
-		Mat(mFeatureVec[i]).copyTo(data.row(i));
-        label.at<float>(i, 0) = mResultVec[i] ? 1.0 : 0.0;
-	}
-    
-	CvSVMParams params;
-    params.svm_type = CvSVM::C_SVC;
-    params.kernel_type = CvSVM::LINEAR;
-    params.term_crit = cvTermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
-    
-    mSVM.train(data, label, Mat(), Mat(), params);
-	mSVM.save(SVM_DATA_FILE.c_str());
+//    int size = int(mFeatureVec.size());
+//	Mat data(size, Feature::LEN, CV_32FC1);
+//	Mat label(size, 1, CV_32FC1);
+//
+//	for (int i = 0; i < size; i++) {
+//		Mat(mFeatureVec[i]).copyTo(data.row(i));
+//        label.at<float>(i, 0) = mResultVec[i] ? 1.0 : 0.0;
+//	}
+//
+//    mSVM->setType(ml::SVM::C_SVC);
+//    mSVM->setKernel(ml::SVM::LINEAR);
+//    mSVM->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER, 100, 1e-6));
+//
+//    Ptr<TrainData> td = TrainData::create(data, cv::ROW_SAMPLE, label);
+//    mSVM->train(td);
+//
+//    mSVM.train(data, label, Mat(), Mat(), params);
+//	mSVM.save(SVM_DATA_FILE.c_str());
 }
 
 void FlameDecider::train(const map<int, Target>& targets)
@@ -155,7 +157,7 @@ void FlameDecider::train(const map<int, Target>& targets)
 #else
 inline bool FlameDecider::svmPredict(const Feature& feature)
 {
-    float result = mSVM.predict(Mat(feature));
+    float result = mSVM->predict(Mat(feature));
     cout << "result: " << result << endl;
 	return result == 1.0;
 }

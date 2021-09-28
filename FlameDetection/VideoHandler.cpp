@@ -16,7 +16,7 @@ VideoHandler::VideoHandler(int device, bool saveKeyFrame, bool saveVideo)
 , mVideoFPS(0)
 {
     if (mCapture.isOpened()) {
-        mVideoFPS = mCapture.get(CV_CAP_PROP_FPS);
+        mVideoFPS = mCapture.get(cv::CAP_PROP_FPS);
         if (mVideoFPS == 0) {
             mVideoFPS = 8.0;
         }
@@ -30,7 +30,7 @@ VideoHandler::VideoHandler(const string& file, bool saveKeyFrame)
 , mVideoFPS(0)
 {
     if (mCapture.isOpened()) {
-        mVideoFPS = mCapture.get(CV_CAP_PROP_FPS);
+        mVideoFPS = mCapture.get(cv::CAP_PROP_FPS);
         assert(mVideoFPS != 0);
     }
 }
@@ -108,9 +108,9 @@ bool VideoHandler::saveVideo()
         cout << "Saving video to '" << mSaveVideoFile << "'." << endl;
         
         // in Mac OS X, only 'mp4v' is supported
-        int fourcc = CV_FOURCC('m', 'p', '4', 'v');
-        Size size = Size((int)mCapture.get(CV_CAP_PROP_FRAME_WIDTH),
-                         (int)mCapture.get(CV_CAP_PROP_FRAME_HEIGHT));
+        int fourcc = cv::VideoWriter::fourcc('m', 'p', '4', 'v');
+        Size size = Size((int)mCapture.get(CAP_PROP_FRAME_WIDTH),
+                         (int)mCapture.get(CAP_PROP_FRAME_HEIGHT));
 
         mWriter.open(mSaveVideoFile, fourcc, mVideoFPS, size, true);
     }

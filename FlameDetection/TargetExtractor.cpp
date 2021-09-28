@@ -73,7 +73,6 @@ void Region::merge(const Region& r)
 
 TargetExtractor::TargetExtractor()
 {
-    mMOG.set("detectShadows", false);
 }
 
 #ifdef OLD_ALGO
@@ -184,8 +183,8 @@ void TargetExtractor::regionGrow2(int areaThreshold, int diffThreshold)
 
 void TargetExtractor::movementDetect(double learningRate)
 {
-    mMOG(mFrame, mMask, learningRate);
-    mMOG.getBackgroundImage(mBackground);
+    mMOG->apply(mFrame, mMask, learningRate);
+    mMOG->getBackgroundImage(mBackground);
 }
 
 void TargetExtractor::colorDetect(int redThreshold, double saturationThreshold)
@@ -261,13 +260,13 @@ void TargetExtractor::fill(int ksize, int threshold)
 void TargetExtractor::regionGrow(int threshold)
 {
     Mat gray;
-    cvtColor(mFrame, gray, CV_BGR2GRAY);
+    cvtColor(mFrame, gray, COLOR_BGR2GRAY);
     
     Mat temp;
     mMask.copyTo(temp);
     
     vector<vector<Point> > contours;
-    findContours(temp, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+    findContours(temp, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
     
     int maxQueueSize = mFrame.rows * mFrame.cols / 4;
     static int direction[8][2] = {
@@ -278,7 +277,7 @@ void TargetExtractor::regionGrow(int threshold)
     for (int i = 0; i < contours.size(); i++) {
         Rect rect = boundingRect(Mat(contours[i]));
         Mat mask = Mat::zeros(gray.size(), CV_8U);
-        drawContours(mask, contours, i, Scalar::all(255), CV_FILLED);
+        drawContours(mask, contours, i, Scalar::all(255), cv::FILLED);
         int size = sum(mask(rect))[0] / 255;
         Scalar m, s;
         meanStdDev(gray(rect), m, s, mask(rect));
@@ -343,7 +342,7 @@ void TargetExtractor::smallAreaFilter(int threshold, int keep)
 {
     vector<vector<Point> > contours;
     // this will change mMask, but it doesn't matter
-    findContours(mMask, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+    findContours(mMask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
     
     vector<int> indexes;
     vector<double> areas;
@@ -380,7 +379,7 @@ void TargetExtractor::smallAreaFilter(int threshold, int keep)
         
         vector<double>::difference_type offset = it - areas.begin();
         int index = indexes[offset];
-        drawContours(mMask, contours, index, Scalar::all(255), CV_FILLED);
+        drawContours(mMask, contours, index, Scalar::all(255), cv::FILLED);
         
         // use 'resize' and 'swap' to avoid copy of contours
         vector<ContourInfo>::size_type size = mContours.size();

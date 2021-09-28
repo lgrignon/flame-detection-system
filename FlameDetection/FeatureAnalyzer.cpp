@@ -20,7 +20,7 @@ void Feature::calcColorFeature()
     // TODO: optimize this part, reduce extra work
     
     Mat hsv;
-    cvtColor(mROI, hsv, CV_BGR2HSV_FULL);
+    cvtColor(mROI, hsv, cv::COLOR_BGR2HSV_FULL);
     
     Mat temp(mROI.size(), CV_8UC3), mixed;
     Mat src[] = { mROI, mGray, hsv };
@@ -211,7 +211,7 @@ void Feature::calcAreaVar()
 void Feature::calc(const Region& region, const Mat& frame)
 {
     mROI = frame(region.rect);
-    cvtColor(mROI, mGray, CV_BGR2GRAY);
+    cvtColor(mROI, mGray, cv::COLOR_BGR2GRAY);
     const Mat& mask = videoHandler->getDetector().getExtractor().getMask();
     mMask = mask(region.rect);
     mArea = 0;
