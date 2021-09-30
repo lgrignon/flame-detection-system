@@ -28,7 +28,7 @@ int main(int argc, const char* argv[])
 {
     cout << "current dir: " << string(fs::current_path()) << endl;
     
-    VideoHandler handler(string(PROJECT_DIR) + "/clips/5.avi");
+    VideoHandler handler(string(PROJECT_DIR) + "/clips/ImmobileGroup7.mov");
     videoHandler = &handler;
     
     int ret = handler.handle();
